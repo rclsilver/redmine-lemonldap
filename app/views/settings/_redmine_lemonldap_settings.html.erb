@@ -28,6 +28,12 @@
 </p>
 
 <p>
+  <%=content_tag(:label, l(:label_isadmin_http_header_name)) %>
+  <%=text_field_tag 'settings[isadmin_env_var]', @settings['isadmin_env_var'] %><br/>
+  (<%=l(:label_default)%>: HTTP_IS_ADMIN)
+</p>
+
+<p>
   <%=content_tag(:label, l(:label_enable_auto_registration))%>
   <%=check_box_tag 'settings[auto_registration]', true, @settings['auto_registration'] == "true" %>
 </p>

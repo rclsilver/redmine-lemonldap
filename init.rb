@@ -12,6 +12,7 @@ Redmine::Plugin.register :redmine_lemonldap do
              'firstname_env_var' => 'HTTP_FIRSTNAME',
              'lastname_env_var' => 'HTTP_LASTNAME',
              'email_env_var' => 'HTTP_EMAIL',
+             'isadmin_env_var' => 'HTTP_IS_ADMIN',
              'auto_registration' => 'false'
            }
 end
