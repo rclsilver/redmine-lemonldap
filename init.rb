@@ -16,3 +16,7 @@ Redmine::Plugin.register :redmine_lemonldap do
              'auto_registration' => 'false'
            }
 end
+
+ActionDispatch::Callbacks.to_prepare do
+  require 'lemonldap/application_controller_patch'
+end
