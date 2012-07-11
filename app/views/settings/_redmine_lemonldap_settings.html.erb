@@ -1,0 +1,33 @@
+<p>
+  <%=content_tag(:label, l(:label_enable_lemonldap_auth))%>
+  <%=check_box_tag 'settings[enable]', true, @settings['enable'] == "true" %>
+</p>
+
+<p>
+  <%=content_tag(:label, l(:label_username_http_header_name)) %>
+  <%=text_field_tag 'settings[username_env_var]', @settings['username_env_var'] %><br/>
+  (<%=l(:label_default)%>: HTTP_AUTH_USER)
+</p>
+
+<p>
+  <%=content_tag(:label, l(:label_firstname_http_header_name)) %>
+  <%=text_field_tag 'settings[firstname_env_var]', @settings['firstname_env_var'] %><br/>
+  (<%=l(:label_default)%>: HTTP_FIRSTNAME)
+</p>
+
+<p>
+  <%=content_tag(:label, l(:label_lastname_http_header_name)) %>
+  <%=text_field_tag 'settings[lastname_env_var]', @settings['lastname_env_var'] %><br/>
+  (<%=l(:label_default)%>: HTTP_LASTNAME)
+</p>
+
+<p>
+  <%=content_tag(:label, l(:label_email_http_header_name)) %>
+  <%=text_field_tag 'settings[email_env_var]', @settings['email_env_var'] %><br/>
+  (<%=l(:label_default)%>: HTTP_EMAIL)
+</p>
+
+<p>
+  <%=content_tag(:label, l(:label_enable_auto_registration))%>
+  <%=check_box_tag 'settings[auto_registration]', true, @settings['auto_registration'] == "true" %>
+</p>
