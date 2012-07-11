@@ -22,7 +22,7 @@ module LemonLDAP
         return user unless Setting.plugin_redmine_lemonldap['enable'] == "true"
 
         # fetch the username from the HTTP header
-        remote_username = request.env['HTTP_AUTH_USER']
+        remote_username = request.env[Setting.plugin_redmine_lemonldap['username_env_var']]
 
         if remote_username.nil?
           # do not touch user, if he didn't use http authentication to log in
@@ -40,24 +40,60 @@ module LemonLDAP
 
         #log out current logged in user
         reset_session
-        try_login remote_username
+        try_login remote_username, request
       end
 
-      def try_login(remote_username)
+      def try_login(remote_username, request)
         # find user by login name
         user = User.active.find_by_login remote_username
       
         if user.nil?
           #user was not found in the database, try selfregistration if enabled
           if Setting.plugin_redmine_lemonldap['auto_registration'] == 'true'
+            # get HTTP header names
+            user_firstname_attr = Setting.plugin_redmine_lemonldap['firstname_env_var']
+            user_lastname_attr = Setting.plugin_redmine_lemonldap['lastname_env_var']
+            user_email_attr = Setting.plugin_redmine_lemonldap['email_env_var']
+            user_isadmin_attr = Setting.plugin_redmine_lemonldap['isadmin_env_var']
+
+            # initialize values
+            user_firstname = '<no first name given>'
+            user_lastname = '<no last name given>'
+            user_email = 'no-mail-given@example.com'
+            user_isadmin = false
+
+            # set values if available
+            if !user_firstname_attr.nil? and !user_firstname_attr.empty?
+              if request.env.has_key?(user_firstname_attr) and !request.env[user_firstname_attr].nil? and !request.env[user_firstname_attr].empty?
+                user_firstname = request.env[user_firstname_attr]
+              end
+            end
+
+            if !user_lastname_attr.nil? and !user_lastname_attr.empty?
+              if request.env.has_key?(user_lastname_attr) and !request.env[user_lastname_attr].nil? and !request.env[user_lastname_attr].empty?
+                user_lastname = request.env[user_lastname_attr]
+              end
+            end
+
+            if !user_email_attr.nil? and !user_email_attr.empty?
+              if request.env.has_key?(user_email_attr) and !request.env[user_email_attr].nil? and !request.env[user_email_attr].empty?
+                user_email = request.env[user_email_attr]
+              end
+            end
+
+            if !user_isadmin_attr.nil? and !user_isadmin_attr.empty?
+              if request.env.has_key?(user_isadmin_attr) and !request.env[user_isadmin_attr].nil? and !request.env[user_isadmin_attr].empty?
+                user_isadmin = request.env[user_isadmin_attr]
+              end
+            end
 
             # fill the new user with values from HTTP headers
             @user = User.new(:language => Setting.default_language)
             @user.login = remote_username
-            @user.admin = false # HTTP_IS_ADMIN
-            @user.firstname = 'Thomas' # HTTP_FIRSTNAME
-            @user.lastname = 'Betrancourt' # HTTP_LASTNAME
-            @user.mail = 'thomas@betrancourt.net' # HTTP_EMAIL
+            @user.firstname = user_firstname
+            @user.lastname = user_lastname
+            @user.mail = user_email
+            @user.admin = user_isadmin == '1'
 
             if @user.save
               return @user

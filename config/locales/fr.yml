@@ -8,3 +8,5 @@ fr:
   label_isadmin_http_header_name: Nom de la variable d'environnement qui défini si l'utilisateur est administrateur
   label_default: défaut
   label_enable_auto_registration: Création de compte automatique
+  error_cannot_create_user: Erreur lors de la création du compte de l'utilisateur
+  error_unknown_user: Utilisateur inexistant
