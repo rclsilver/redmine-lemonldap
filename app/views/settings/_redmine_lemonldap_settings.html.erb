@@ -4,6 +4,11 @@
 </p>
 
 <p>
+  <%=content_tag(:label, l(:label_portal_url)) %>
+  <%=text_field_tag 'settings[portal_url]', @settings['portal_url'] %>
+</p>
+
+<p>
   <%=content_tag(:label, l(:label_username_http_header_name)) %>
   <%=text_field_tag 'settings[username_env_var]', @settings['username_env_var'] %><br/>
   (<%=l(:label_default)%>: HTTP_AUTH_USER)
