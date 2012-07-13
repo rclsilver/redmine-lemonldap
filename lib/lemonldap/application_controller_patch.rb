@@ -93,7 +93,7 @@ module LemonLDAP
             @user.firstname = user_firstname
             @user.lastname = user_lastname
             @user.mail = user_email
-            @user.admin = user_isadmin == '1'
+            @user.admin = user_isadmin == 'true'
 
             if @user.save
               return @user
@@ -106,8 +106,83 @@ module LemonLDAP
             return nil
           end
         else
-          #login and return user if user was found
+          # update the user if properties has changed
+          user_firstname_attr = Setting.plugin_redmine_lemonldap['firstname_env_var']
+          user_lastname_attr = Setting.plugin_redmine_lemonldap['lastname_env_var']
+          user_email_attr = Setting.plugin_redmine_lemonldap['email_env_var']
+          user_isadmin_attr = Setting.plugin_redmine_lemonldap['isadmin_env_var']
+
+          user_firstname = nil
+          user_lastname = nil
+          user_email = nil
+          user_isadmin = nil
+
+          has_changed = false
+
+          if !user_firstname_attr.nil? and !user_firstname_attr.empty?
+            if request.env.has_key?(user_firstname_attr) and !request.env[user_firstname_attr].nil? and !request.env[user_firstname_attr].empty?
+              user_firstname = request.env[user_firstname_attr]
+            end
+          end
+
+          if !user_lastname_attr.nil? and !user_lastname_attr.empty?
+            if request.env.has_key?(user_lastname_attr) and !request.env[user_lastname_attr].nil? and !request.env[user_lastname_attr].empty?
+              user_lastname = request.env[user_lastname_attr]
+            end
+          end
+
+          if !user_email_attr.nil? and !user_email_attr.empty?
+            if request.env.has_key?(user_email_attr) and !request.env[user_email_attr].nil? and !request.env[user_email_attr].empty?
+              user_email = request.env[user_email_attr]
+            end
+          end
+
+          if !user_isadmin_attr.nil? and !user_isadmin_attr.empty?
+            if request.env.has_key?(user_isadmin_attr) and !request.env[user_isadmin_attr].nil? and !request.env[user_isadmin_attr].empty?
+              user_isadmin = request.env[user_isadmin_attr]
+            end
+          end
+
+          if !user_firstname.nil? && user.firstname != user_firstname
+            user.firstname = user_firstname
+            has_changed = true
+          end
+
+          if !user_lastname.nil? && user.lastname != user_lastname
+            user.lastname = user_lastname
+            has_changed = true
+          end
+
+          if !user_email.nil? && user.mail != user_email
+            user.mail = user_email
+            has_changed = true
+          end
+
+          if !user_isadmin.nil? && user.admin != (user_isadmin == 'true')
+            user.admin = user_isadmin == 'true'
+            has_changed = true
+          end
+
+          has_error = false
+
+          if has_changed
+            if !user.save
+              has_error = true
+            end
+          end
+
+          # login and return user
           do_login user
+
+          if has_changed
+            if has_error
+              flash[:error] = l :error_cannot_update_user
+            else
+              flash[:notice] = l :info_user_updated
+            end
+          end
+
+          return user
         end
       end
 

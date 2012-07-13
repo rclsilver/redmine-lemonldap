@@ -9,5 +9,7 @@ fr:
   label_default: défaut
   label_enable_auto_registration: Création de compte automatique
   login_lemonldap_title: Connexion avec LemonLDAP::NG
+  info_user_updated: Compte utilisateur mis à jour
   error_cannot_create_user: Erreur lors de la création du compte de l'utilisateur
+  error_cannot_update_user: Erreur lors de la mise à jour du compte de l'utilisateur
   error_unknown_user: Utilisateur inexistant
