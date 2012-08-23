@@ -1,3 +1,16 @@
 # English strings go here for Rails i18n
 en:
-  my_label: "My label"
+  label_enable_lemonldap_auth: Enable LemonLDAP::NG users authentication
+  label_portal_url: LemonLDAP::NG portal URL
+  label_username_http_header_name: Environment variable for the username
+  label_firstname_http_header_name: Environment variable for the first name
+  label_lastname_http_header_name: Environment variable for the last name
+  label_email_http_header_name: Environment variable for the e-mail
+  label_isadmin_http_header_name: Environment variable containing the administration flag
+  label_default: default
+  label_enable_auto_registration: Enable the auto registration
+  login_lemonldap_title: Sign in with LemonLDAP::NG
+  info_user_updated: User account updated
+  error_cannot_create_user: Error while creating the user account
+  error_cannot_update_user: Error while updating the user account
+  error_unknown_user: Unknown user account
