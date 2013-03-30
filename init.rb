@@ -1,6 +1,6 @@
 Redmine::Plugin.register :redmine_lemonldap do
   name 'LemonLDAP::NG plugin'
-  author 'Thomas Bétrancourt'
+  author 'Thomas Betrancourt'
   description 'Allow users to log in to your site using LemonLDAP::NG authentication'
   version '0.0.1'
   url 'http://projects.rclsilver.net/projects/redmine-lemonldap'
